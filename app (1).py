@@ -3,7 +3,8 @@ import pandas as pd
 import random
 from nltk.tokenize import word_tokenize
 import nltk
-import gdown  # to download from Google Drive
+import gdown
+from io import StringIO
 
 nltk.download('punkt')
 
@@ -11,17 +12,16 @@ nltk.download('punkt')
 file_id = "1Nz5_63fpog9O5ejPErbTmxgWtqM1eLRr"
 url = f"https://drive.google.com/uc?id={file_id}"
 
-# Download the file locally
-output = "social_media_ads.csv"
-gdown.download(url, output, quiet=False)
+# Download CSV content as text
+csv_text = gdown.download(url, output=None, quiet=True)
 
-# Read CSV
-df = pd.read_csv(output)
+# Read CSV from string
+df = pd.read_csv(StringIO(csv_text))
 
 # Detect text column
 text_col = df.select_dtypes(include='object').columns[0]
 
-# Build simple Markov chain model
+# Build Markov chain
 def build_markov_chain(text_list, n=1):
     model = {}
     for text in text_list:
