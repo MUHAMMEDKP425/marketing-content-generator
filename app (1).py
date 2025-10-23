@@ -3,12 +3,20 @@ import pandas as pd
 import random
 from nltk.tokenize import word_tokenize
 import nltk
+import gdown  # to download from Google Drive
+
 nltk.download('punkt')
 
-# Load CSV from Google Drive
+# Google Drive file ID
 file_id = "1Nz5_63fpog9O5ejPErbTmxgWtqM1eLRr"
-url = f"https://drive.google.com/uc?export=download&id={file_id}"
-df = pd.read_csv(url)
+url = f"https://drive.google.com/uc?id={file_id}"
+
+# Download the file locally
+output = "social_media_ads.csv"
+gdown.download(url, output, quiet=False)
+
+# Read CSV
+df = pd.read_csv(output)
 
 # Detect text column
 text_col = df.select_dtypes(include='object').columns[0]
